@@ -1,5 +1,7 @@
 """Authentication & Security utilities for GhalaSmart."""
+import logging
 import os
+import secrets
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -12,8 +14,13 @@ from sqlalchemy.orm import Session
 from db.database import get_db
 from db.models import Farmer
 
-# Secret key & token config
-SECRET_KEY = os.getenv("JWT_SECRET", "ghalasmart_production_secure_secret_key_2026_kenya")
+# Secret key & token config (JWT_SECRET is loaded from .env by db.database)
+SECRET_KEY = os.getenv("JWT_SECRET")
+if not SECRET_KEY:
+    logging.getLogger("ghalasmart").warning(
+        "JWT_SECRET is not set; using a random secret. Logins will expire when the server restarts."
+    )
+    SECRET_KEY = secrets.token_urlsafe(32)
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
 
