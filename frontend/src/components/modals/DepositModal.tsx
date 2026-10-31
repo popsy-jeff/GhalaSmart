@@ -184,7 +184,7 @@ export const DepositModal: React.FC<Props> = ({
             {forecast && (
               <div className="modal-forecast-preview">
                 <div className="preview-top">
-                  <span className="preview-tag">AI Forecast Advisory</span>
+                  <span className="preview-tag">Market Price Advisory</span>
                   <span className={`advisory-badge ${forecast.decision === 'Store' ? 'store' : 'sell'}`}>
                     {forecast.decision === 'Store' ? 'RECOMMENDED: STORE' : 'RECOMMENDED: SELL NOW'}
                   </span>

@@ -57,7 +57,7 @@ export const Navbar: React.FC<Props> = ({
           <div className="live-engine-tag">
             <span className="engine-pulse"></span>
             <Activity size={13} />
-            <span>AI Forecaster Online (KAMIS + agriBORA)</span>
+            <span>Market Prices Live (KAMIS + agriBORA)</span>
           </div>
         </div>
 

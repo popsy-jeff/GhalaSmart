@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { RecommendRequest } from '../types';
 import { fetchCounties } from '../api';
-import { MapPin, Scale, Award, Sparkles, Loader2 } from 'lucide-react';
+import { MapPin, Scale, Award, TrendingUp, Loader2 } from 'lucide-react';
 
 interface Props {
   onSubmit: (data: RecommendRequest) => void;
@@ -68,11 +68,11 @@ export const DepositForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
     <div className="card form-container">
       <div className="form-header">
         <div className="form-header-icon">
-          <Sparkles size={22} />
+          <TrendingUp size={22} />
         </div>
         <div>
           <h2>Maize Deposit Assessment</h2>
-          <p className="form-subtitle">Enter your grain batch specs for AI storage & price prediction</p>
+          <p className="form-subtitle">Enter your grain batch details for a storage & market price recommendation</p>
         </div>
       </div>
 
@@ -196,8 +196,8 @@ export const DepositForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
             </>
           ) : (
             <>
-              <Sparkles size={18} />
-              <span>Get AI Recommendation</span>
+              <TrendingUp size={18} />
+              <span>Get Recommendation</span>
             </>
           )}
         </button>

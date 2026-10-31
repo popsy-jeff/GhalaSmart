@@ -4,7 +4,7 @@ import { RecommendationDashboard } from '../components/RecommendationDashboard';
 import { getRecommendation } from '../api';
 import type { RecommendRequest, RecommendResponse } from '../types';
 import { useAuth } from '../context/AuthContext';
-import { Sparkles, BarChart2, Shield, AlertTriangle, ArrowRight, UserCheck } from 'lucide-react';
+import { TrendingUp, BarChart2, Shield, AlertTriangle, ArrowRight, UserCheck } from 'lucide-react';
 
 export const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -42,9 +42,9 @@ export const Dashboard: React.FC = () => {
             <UserCheck size={14} />
             <span>Welcome, {user?.full_name || 'Grain Member'}</span>
           </div>
-          <h1>AI Granary Storage & Financing Advisor</h1>
+          <h1>Granary Storage & Financing Advisor</h1>
           <p className="page-subtitle">
-            Leverage time-series XGBoost forecasting models (KAMIS & agriBORA datasets) to decide whether to
+            Use KAMIS & agriBORA wholesale market prices to decide whether to
             store or sell your maize, and receive instant M-Pesa cash advances.
           </p>
         </div>
@@ -108,8 +108,8 @@ export const Dashboard: React.FC = () => {
 
               <div className="empty-features-grid">
                 <div className="feature-pill">
-                  <Sparkles size={16} />
-                  <span>XGBoost Price Forecasting</span>
+                  <TrendingUp size={16} />
+                  <span>Market Price Outlook</span>
                 </div>
                 <div className="feature-pill">
                   <Shield size={16} />

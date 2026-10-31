@@ -79,7 +79,7 @@ export const RegisterPage: React.FC = () => {
           </div>
           <h2>Join GhalaSmart Network</h2>
           <p className="auth-subtitle">
-            Register as a certified grain depositor to access AI pricing and instant financing
+            Register as a certified grain depositor to access market price advice and instant financing
           </p>
         </div>
 

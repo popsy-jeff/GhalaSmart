@@ -23,7 +23,7 @@ export const Sidebar: React.FC = () => {
         </div>
         <div className="logo-text">
           <span className="brand-name">GhalaSmart</span>
-          <span className="brand-tag">Grain Intelligence</span>
+          <span className="brand-tag">Grain Storage & Finance</span>
         </div>
       </div>
 
@@ -63,14 +63,14 @@ export const Sidebar: React.FC = () => {
         </NavLink>
       </nav>
 
-      {/* Market Intelligence Pill */}
+      {/* Market Prices Pill */}
       <div className="sidebar-info-card">
         <div className="info-header">
           <TrendingUp size={16} />
-          <span>AI Market Forecast</span>
+          <span>Market Price Outlook</span>
         </div>
         <p className="info-desc">
-          Trained on Kenyan KAMIS & agriBORA wholesale maize pricing models.
+          Based on Kenyan KAMIS & agriBORA wholesale maize prices.
         </p>
         <div className="info-status">
           <span className="status-dot"></span>

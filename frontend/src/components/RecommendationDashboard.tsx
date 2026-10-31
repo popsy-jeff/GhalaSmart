@@ -112,11 +112,11 @@ export const RecommendationDashboard: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* AI Reasoning Box */}
+      {/* Reasoning Box */}
       <div className="reasoning-box">
         <div className="reasoning-header">
           <ShieldCheck size={18} />
-          <strong>Market Intelligence Advisory</strong>
+          <strong>Market Advisory</strong>
         </div>
         <p>{recommendation.reasoning}</p>
       </div>

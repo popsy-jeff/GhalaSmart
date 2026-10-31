@@ -87,7 +87,7 @@ export async function fetchCurrentUser(): Promise<Farmer> {
   return res.json();
 }
 
-// ── Counties & Machine Learning Advisory ────────────────────────
+// ── Counties & Market Price Advisory ────────────────────────────
 export async function fetchCounties(): Promise<string[]> {
   try {
     const res = await fetch(`${API_BASE}/counties`);
