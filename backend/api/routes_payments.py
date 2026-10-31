@@ -153,20 +153,19 @@ def settle_deposit(
     loan = db.query(Loan).filter(Loan.deposit_id == deposit_id).first()
     has_loan = loan is not None and loan.status == "ACTIVE"
 
-    # Determine sale price
+    # Determine the sale price for this grade. A price the member enters and the receipt's
+    # stored price are already grade-adjusted; only the raw market price needs the multiplier.
     if req.sale_price_per_kg and req.sale_price_per_kg > 0:
-        sale_price = float(req.sale_price_per_kg)
+        final_unit_price = float(req.sale_price_per_kg)
     elif routes_forecast.forecaster:
         try:
-            sale_price = float(routes_forecast.forecaster.get_current_price(deposit.county))
+            raw_price = float(routes_forecast.forecaster.get_current_price(deposit.county))
+            final_unit_price = raw_price * GRADE_MULTIPLIER.get(deposit.grade, 1.0)
         except Exception:
-            sale_price = float(deposit.current_price_per_kg or 45.0)
+            final_unit_price = float(deposit.current_price_per_kg or 45.0)
     else:
-        sale_price = float(deposit.current_price_per_kg or 45.0)
+        final_unit_price = float(deposit.current_price_per_kg or 45.0)
 
-    # Apply grade multiplier
-    grade_mult = GRADE_MULTIPLIER.get(deposit.grade, 1.0)
-    final_unit_price = sale_price * grade_mult
     gross_sale = round(final_unit_price * float(deposit.quantity_kg), 2)
 
     # Calculate duration

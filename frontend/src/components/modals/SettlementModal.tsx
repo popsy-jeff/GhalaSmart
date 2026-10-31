@@ -3,9 +3,8 @@ import { X, CheckCircle2, DollarSign, Loader2, ArrowRight } from 'lucide-react';
 import type { Deposit, Loan, SettleResponse } from '../../types';
 import { fetchLoans, settleDeposit } from '../../api';
 
-// Same rates the backend uses at settlement (core/decision_engine.py)
+// Same storage rate the backend uses at settlement (core/decision_engine.py)
 const STORAGE_COST_PER_KG_PER_WEEK = 0.5;
-const GRADE_MULTIPLIER: Record<string, number> = { 'Grade 1': 1.0, 'Grade 2': 0.95, 'Grade 3': 0.85 };
 
 const toCents = (n: number) => Math.round(n * 100) / 100;
 
@@ -52,8 +51,8 @@ export const SettlementModal: React.FC<Props> = ({
   // Mirrors settle_deposit: interest and storage run from the advance date (or deposit date), minimum 1 week
   const currentPrice = deposit.current_price_per_kg || 45.0;
   const activeSalePrice = salePrice > 0 ? salePrice : currentPrice;
-  const gradedPrice = activeSalePrice * (GRADE_MULTIPLIER[deposit.grade] ?? 1.0);
-  const grossEstimate = deposit.quantity_kg * gradedPrice;
+  // The entered price is already for this grade (the spot price on the receipt is grade-adjusted)
+  const grossEstimate = deposit.quantity_kg * activeSalePrice;
   const weeksStored = Math.max(daysSince(loan ? loan.disbursement_date : deposit.deposit_date) / 7, 1);
   const estimatedPrincipal = loan ? Number(loan.principal_amount) : 0;
   const estimatedInterest = loan ? estimatedPrincipal * Number(loan.interest_rate) * weeksStored : 0;
@@ -181,7 +180,7 @@ export const SettlementModal: React.FC<Props> = ({
                 <div className="calculation-breakdown-card">
                   <div className="calc-line">
                     <span>
-                      Gross Proceeds ({deposit.quantity_kg} kg @ KES {gradedPrice.toFixed(2)}/kg, {deposit.grade}):
+                      Gross Proceeds ({deposit.quantity_kg} kg @ KES {activeSalePrice.toFixed(2)}/kg, {deposit.grade}):
                     </span>
                     <strong>KES {grossEstimate.toLocaleString(undefined, { maximumFractionDigits: 2 })}</strong>
                   </div>
