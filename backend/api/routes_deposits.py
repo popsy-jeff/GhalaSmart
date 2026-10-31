@@ -17,9 +17,9 @@ router = APIRouter(prefix="/api/deposits", tags=["Deposits"])
 
 
 def generate_receipt_number() -> str:
-    """Generate a unique Warehouse Receipt Number, e.g. GHL-WR-2026-8742."""
-    suffix = "".join(random.choices(string.digits, k=4))
-    return f"GHL-WR-2026-{suffix}"
+    """Generate a unique Warehouse Receipt Number, e.g. GHL-WR-2026-874213."""
+    suffix = "".join(random.choices(string.digits, k=6))
+    return f"GHL-WR-{date.today().year}-{suffix}"
 
 
 @router.post("", response_model=DepositResponse, status_code=status.HTTP_201_CREATED)
