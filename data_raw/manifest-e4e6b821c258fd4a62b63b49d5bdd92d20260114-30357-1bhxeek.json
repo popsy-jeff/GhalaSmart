@@ -1,0 +1,61 @@
+{
+  "description": "This is a system generated manifest of files expected to be present in this zip. It can be safely deleted.",
+  "metadata": {
+    "generated_at": "2026-01-14T08:44:22+00:00",
+    "trigger": {
+      "file_hashid": "unknown",
+      "action": "unknown"
+    }
+  },
+  "manifest": [
+    {
+      "filename": "agriBORA_Final_Weeks_maize_price.csv",
+      "filesize": 651,
+      "description": "Final weeks data for scoring of private leaderboard",
+      "created_at": "2026-01-14 07:59:42 UTC",
+      "updated_at": "2026-01-14 08:01:00 UTC"
+    },
+    {
+      "filename": "agriBORA_maize_prices_weeks_46_to_51.csv",
+      "filesize": 1885,
+      "description": "agriBORA's maize prices for weeks 46-51 of year 2025",
+      "created_at": "2025-12-23 11:14:52 UTC",
+      "updated_at": "2025-12-23 11:15:01 UTC"
+    },
+    {
+      "filename": "SampleSubmission.csv",
+      "filesize": 231,
+      "description": "This is an example of what your submission file should look like. The order of the rows does not matter, but the names of the \"ID\" must be correct.",
+      "created_at": "2025-12-23 11:19:35 UTC",
+      "updated_at": "2025-12-23 11:20:02 UTC"
+    },
+    {
+      "filename": "kamis_maize_prices.csv",
+      "filesize": 2701220,
+      "description": "Historical prices of maize at different market in Kenya from 2021 - 2025/07.",
+      "created_at": "2025-11-12 11:19:46 UTC",
+      "updated_at": "2025-11-12 11:21:38 UTC"
+    },
+    {
+      "filename": "kamis_maize_prices_raw.csv",
+      "filesize": 2300652,
+      "description": "Raw historical prices of maize at different market in Kenya from 2021 - 2025/07.",
+      "created_at": "2025-11-12 11:30:50 UTC",
+      "updated_at": "2025-11-12 11:31:23 UTC"
+    },
+    {
+      "filename": "StarterNotebook.ipynb",
+      "filesize": 753589,
+      "description": "This is a starter notebook to help you make your first submission. ",
+      "created_at": "2025-11-14 13:29:57 UTC",
+      "updated_at": "2025-11-14 13:30:00 UTC"
+    },
+    {
+      "filename": "agriBORA_maize_prices.csv",
+      "filesize": 13274,
+      "description": "Transaction data between businesses showing the weekly white maize prices from 2023/10 - 2025/10.",
+      "created_at": "2025-12-09 12:21:23 UTC",
+      "updated_at": "2025-12-09 12:21:30 UTC"
+    }
+  ]
+}
