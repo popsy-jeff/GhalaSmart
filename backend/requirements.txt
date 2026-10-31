@@ -10,3 +10,6 @@ sqlalchemy
 pymysql
 python-dotenv
 scikit-learn
+bcrypt
+python-jose[cryptography]
+httpx
