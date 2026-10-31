@@ -50,6 +50,8 @@ class DecisionEngine:
 
         # Baseline: sell now
         sell_now_value = current_price * quantity_kg
+        # Same advance whatever the decision, matching what accept_advance pays out
+        potential_advance = sell_now_value * ADVANCE_PERCENTAGE
 
         best = {
             "decision": "Sell Now",
@@ -59,7 +61,7 @@ class DecisionEngine:
             "storage_cost": 0.0,
             "advance_interest": 0.0,
             "expected_net_value": round(sell_now_value, 2),
-            "advance_offer": 0.0,
+            "advance_offer": round(potential_advance, 2),
             "reasoning": "",
         }
 
@@ -71,7 +73,6 @@ class DecisionEngine:
             forecasted = raw_forecasted * grade_mult
 
             total_storage_cost = STORAGE_COST_PER_KG_PER_WEEK * quantity_kg * weeks_ahead
-            potential_advance = current_price * quantity_kg * ADVANCE_PERCENTAGE
             total_interest = potential_advance * WEEKLY_INTEREST_RATE * weeks_ahead
 
             expected_gross = forecasted * quantity_kg
@@ -94,7 +95,6 @@ class DecisionEngine:
                 best["storage_cost"] = round(total_storage_cost, 2)
                 best["advance_interest"] = round(total_interest, 2)
                 best["expected_net_value"] = round(expected_net, 2)
-                best["advance_offer"] = round(potential_advance, 2)
 
         # Build reasoning
         if best["decision"] == "Store":
