@@ -20,7 +20,9 @@
   --accent-blue: #3b82f6;
   --mpesa-green: #00a859;
   /* See-through wash over the main area photo so text stays readable */
-  --main-overlay: rgba(248, 250, 252, 0.78);
+  --main-overlay: rgba(248, 250, 252, 0.3);
+  /* Glow behind text that sits directly on the photo */
+  --main-text-halo: rgba(248, 250, 252, 0.95);
 
   --border-radius: 12px;
   --border-radius-sm: 8px;
@@ -45,7 +47,8 @@
   --primary-color: #10b981;
   --primary-hover: #34d399;
   --primary-glow: rgba(16, 185, 129, 0.2);
-  --main-overlay: rgba(11, 17, 32, 0.82);
+  --main-overlay: rgba(11, 17, 32, 0.5);
+  --main-text-halo: rgba(11, 17, 32, 0.95);
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
@@ -295,12 +298,13 @@ body {
   color: var(--text-primary);
   margin: 0 0 0.4rem 0;
   letter-spacing: -0.5px;
-  text-shadow: 0 1px 3px var(--main-overlay);
+  text-shadow: 0 0 4px var(--main-text-halo), 0 0 12px var(--main-text-halo);
 }
 
 .page-subtitle {
-  color: var(--text-secondary);
-  text-shadow: 0 1px 3px var(--main-overlay);
+  color: var(--text-primary);
+  font-weight: 500;
+  text-shadow: 0 0 3px var(--main-text-halo), 0 0 10px var(--main-text-halo);
   font-size: 0.95rem;
   margin: 0;
   max-width: 780px;
