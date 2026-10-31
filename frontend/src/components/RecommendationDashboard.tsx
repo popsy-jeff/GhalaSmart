@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { RecommendResponse, Deposit, AcceptAdvanceResponse } from '../types';
 import { createDeposit } from '../api';
+import { displayHorizon } from '../forecast';
 import { useAuth } from '../context/AuthContext';
 import { AdvanceModal } from './modals/AdvanceModal';
 import { WarehouseReceiptModal } from './modals/WarehouseReceiptModal';
@@ -43,6 +44,14 @@ export const RecommendationDashboard: React.FC<Props> = ({
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
 
   const isStore = recommendation.decision === 'Store';
+
+  // Price/cost cards: the recommended hold, or for "Sell Now" what holding to the peak would cost
+  const horizon = displayHorizon(recommendation);
+  const shownPrice = horizon?.forecasted_price_per_kg ?? recommendation.forecasted_price_per_kg;
+  const shownWeeks = horizon?.weeks ?? recommendation.recommended_weeks;
+  const shownStorage = horizon?.storage_cost ?? recommendation.storage_cost;
+  const shownInterest = horizon?.interest ?? recommendation.advance_interest;
+  const holdNote = isStore ? '' : `If held ${shownWeeks} weeks · `;
 
   // Handle immediate deposit storage
   const handleCreateDepositOnly = async () => {
@@ -130,27 +139,27 @@ export const RecommendationDashboard: React.FC<Props> = ({
         </div>
 
         <div className="stat-card">
-          <h4>Forecasted Peak Price</h4>
+          <h4>{isStore ? 'Forecasted Sale Price' : 'Forecasted Peak Price'}</h4>
           <p className="stat-value highlight-price">
-            KES {recommendation.forecasted_price_per_kg.toFixed(2)}
+            KES {shownPrice.toFixed(2)}
           </p>
-          <span className="stat-sub">in {recommendation.recommended_weeks} weeks</span>
+          <span className="stat-sub">in {shownWeeks} weeks</span>
         </div>
 
         <div className="stat-card">
           <h4>Est. Storage Fees</h4>
           <p className="stat-value negative">
-            - KES {recommendation.storage_cost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            - KES {shownStorage.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
-          <span className="stat-sub">50 KES/bag monthly storage</span>
+          <span className="stat-sub">{holdNote}KES 45/bag weekly storage</span>
         </div>
 
         <div className="stat-card">
           <h4>Advance Loan Interest</h4>
           <p className="stat-value negative">
-            - KES {recommendation.advance_interest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            - KES {shownInterest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
-          <span className="stat-sub">2% monthly financing rate</span>
+          <span className="stat-sub">{holdNote}0.5% weekly financing rate</span>
         </div>
 
         {/* Expected Net Value Hero */}
@@ -160,7 +169,9 @@ export const RecommendationDashboard: React.FC<Props> = ({
             KES {recommendation.expected_net_value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
           <span className="hero-stat-sub">
-            Gross sale minus carrying costs & financing interest
+            {isStore
+              ? 'Gross sale minus carrying costs & financing interest'
+              : 'Selling now at the spot price, with no storage or interest'}
           </span>
         </div>
       </div>

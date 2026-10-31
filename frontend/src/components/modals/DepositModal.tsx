@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Warehouse, Loader2, ArrowRight } from 'lucide-react';
 import type { Deposit, RecommendResponse } from '../../types';
 import { fetchCounties, getRecommendation, createDeposit } from '../../api';
+import { displayHorizon } from '../../forecast';
 
 interface Props {
   isOpen: boolean;
@@ -195,8 +196,10 @@ export const DepositModal: React.FC<Props> = ({
                     <strong>KES {forecast.current_price_per_kg.toFixed(2)}/kg</strong>
                   </div>
                   <div>
-                    <span className="label">Forecast Peak:</span>
-                    <strong>KES {forecast.forecasted_price_per_kg.toFixed(2)}/kg</strong>
+                    <span className="label">{forecast.decision === 'Store' ? 'Forecast Sale Price:' : 'Forecast Peak:'}</span>
+                    <strong>
+                      KES {(displayHorizon(forecast)?.forecasted_price_per_kg ?? forecast.forecasted_price_per_kg).toFixed(2)}/kg
+                    </strong>
                   </div>
                   <div>
                     <span className="label">60% Cash Advance:</span>
