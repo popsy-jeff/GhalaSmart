@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  Warehouse,
   User,
   Phone,
   Lock,
@@ -75,7 +74,7 @@ export const RegisterPage: React.FC = () => {
         {/* Brand Header */}
         <div className="auth-header">
           <div className="auth-logo-badge">
-            <Warehouse size={28} />
+            <img src="/logo.png" alt="GhalaSmart" className="auth-logo-img" />
           </div>
           <h2>Join GhalaSmart Network</h2>
           <p className="auth-subtitle">

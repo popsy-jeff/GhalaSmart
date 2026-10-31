@@ -19,7 +19,7 @@ export const Sidebar: React.FC = () => {
       {/* Brand Header */}
       <div className="sidebar-logo">
         <div className="logo-icon">
-          <Warehouse size={24} />
+          <img src="/logo.png" alt="GhalaSmart" className="brand-logo-img" />
         </div>
         <div className="logo-text">
           <span className="brand-name">GhalaSmart</span>

@@ -91,14 +91,15 @@ body {
 }
 
 .logo-icon {
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
-  padding: 0.5rem;
-  border-radius: var(--border-radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.brand-logo-img {
+  height: 36px;
+  width: auto;
+  display: block;
 }
 
 .logo-text {
@@ -2736,16 +2737,16 @@ button, .btn-primary, .btn-secondary, .btn-success {
 }
 
 .auth-logo-badge {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem auto;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.auth-logo-img {
+  height: 56px;
+  width: auto;
+  display: block;
 }
 
 .auth-header h2 {

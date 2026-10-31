@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Warehouse, Phone, Lock, ArrowRight, Loader2, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Phone, Lock, ArrowRight, Loader2, ShieldCheck, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const LoginPage: React.FC = () => {
@@ -40,7 +40,7 @@ export const LoginPage: React.FC = () => {
         {/* Brand Header */}
         <div className="auth-header">
           <div className="auth-logo-badge">
-            <Warehouse size={28} />
+            <img src="/logo.png" alt="GhalaSmart" className="auth-logo-img" />
           </div>
           <h2>Member Sign In</h2>
           <p className="auth-subtitle">Access your granary receipts, forecasts, and M-Pesa advances</p>
