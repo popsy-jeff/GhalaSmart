@@ -37,12 +37,6 @@ class TokenResponse(BaseModel):
     user: FarmerResponse
 
 
-class FarmerCreate(BaseModel):
-    full_name: str = Field(..., min_length=2, max_length=100)
-    phone_number: str = Field(..., pattern=r"^(?:\+254|0)\d{9}$")
-    county: str
-
-
 # ── Recommendation (forecast only, no DB write) ────────
 class RecommendRequest(BaseModel):
     county: str
