@@ -21,7 +21,7 @@ def init_forecast_routes(f: MaizeForecaster):
 def get_recommendation(req: RecommendRequest):
     """Get a store-vs-sell recommendation for a maize deposit."""
     if forecaster is None:
-        raise HTTPException(status_code=503, detail="ML model not loaded yet.")
+        raise HTTPException(status_code=503, detail="Price forecasts are not available yet.")
 
     available = forecaster.get_available_counties()
     if req.county not in available:
@@ -40,9 +40,9 @@ def get_recommendation(req: RecommendRequest):
 
 @router.get("/counties")
 def list_counties():
-    """Return the list of counties the model can forecast for."""
+    """Return the list of counties with price forecasts."""
     if forecaster is None:
-        raise HTTPException(status_code=503, detail="ML model not loaded yet.")
+        raise HTTPException(status_code=503, detail="Price forecasts are not available yet.")
     return {"counties": forecaster.get_available_counties()}
 
 
@@ -50,7 +50,7 @@ def list_counties():
 def get_current_price(county: str):
     """Return the latest known wholesale price for a county."""
     if forecaster is None:
-        raise HTTPException(status_code=503, detail="ML model not loaded yet.")
+        raise HTTPException(status_code=503, detail="Price forecasts are not available yet.")
     try:
         price = forecaster.get_current_price(county)
         return {"county": county, "price_per_kg": price}

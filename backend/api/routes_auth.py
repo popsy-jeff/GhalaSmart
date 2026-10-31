@@ -40,7 +40,7 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
         phone_number=farmer.phone_number,
         message=(
             f"Habari {farmer.full_name}! Karibu GhalaSmart. Your member account is active. "
-            f"You can now deposit grain, receive AI price advisories, and unlock instant M-Pesa cash advances."
+            f"You can now deposit grain, receive market price advisories, and unlock instant M-Pesa cash advances."
         ),
         event_type="WELCOME",
         status="DELIVERED",

@@ -26,14 +26,14 @@ async def lifespan(app: FastAPI):
     logger.info("Creating database tables if they don't exist...")
     Base.metadata.create_all(bind=engine)
 
-    logger.info("Loading ML forecasting model...")
+    logger.info("Loading price forecasts...")
     try:
         forecaster = MaizeForecaster()
         init_forecast_routes(forecaster)
-        logger.info(f"Model loaded. Counties: {forecaster.get_available_counties()}")
+        logger.info(f"Price forecasts loaded. Counties: {forecaster.get_available_counties()}")
     except FileNotFoundError as e:
-        logger.warning(f"ML model not found: {e}")
-        logger.warning("The /api/recommend endpoint will return 503 until the model is trained.")
+        logger.warning(f"Price forecast data not found: {e}")
+        logger.warning("The /api/recommend endpoint will return 503 until forecast data is generated.")
 
     yield
     # ── Shutdown ──

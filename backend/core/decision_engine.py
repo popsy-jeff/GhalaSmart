@@ -17,7 +17,7 @@ GRADE_MULTIPLIER = {
 
 
 class DecisionEngine:
-    """Evaluates storage vs. sell decisions using ML price forecasts."""
+    """Evaluates storage vs. sell decisions using market price forecasts."""
 
     def __init__(self, forecaster: MaizeForecaster):
         self.forecaster = forecaster

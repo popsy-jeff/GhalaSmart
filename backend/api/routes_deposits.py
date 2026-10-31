@@ -31,7 +31,7 @@ def create_deposit(
     """Create a new maize deposit and issue a digital Warehouse Receipt."""
     farmer_id = current_user.id
 
-    # Evaluate ML price forecast
+    # Evaluate market price forecast
     current_price = None
     forecasted_price = None
     recommended_weeks = 0
