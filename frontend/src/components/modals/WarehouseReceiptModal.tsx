@@ -51,8 +51,11 @@ export const WarehouseReceiptModal: React.FC<Props> = ({
             {/* Header banner */}
             <div className="certificate-header">
               <div className="cert-brand">
-                <span className="cert-logo-text">GhalaSmart Granary Network</span>
-                <span className="cert-sub">Licensed Collateral Warehouse System &bull; Republic of Kenya</span>
+                <img src="/logo.png" alt="GhalaSmart" className="cert-logo-img" />
+                <div>
+                  <span className="cert-logo-text">GhalaSmart Granary Network</span>
+                  <span className="cert-sub">Collateral Warehouse Receipt</span>
+                </div>
               </div>
               <div className="cert-serial">
                 <span className="serial-label">Receipt Serial Number</span>
