@@ -7,8 +7,8 @@ from decimal import Decimal
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from api import routes_forecast
 from api.auth_utils import get_current_user
-from api.routes_forecast import engine, forecaster
 from api.schemas import DepositCreate, DepositResponse
 from db.database import get_db
 from db.models import Deposit, Farmer, SmsNotification
@@ -36,9 +36,10 @@ def create_deposit(
     forecasted_price = None
     recommended_weeks = 0
 
-    if forecaster and engine:
+    # Read via the module: init_forecast_routes() sets these after import
+    if routes_forecast.forecaster and routes_forecast.engine:
         try:
-            result = engine.evaluate(data.county, data.quantity_kg, data.grade)
+            result = routes_forecast.engine.evaluate(data.county, data.quantity_kg, data.grade)
             current_price = result["current_price_per_kg"]
             forecasted_price = result["forecasted_price_per_kg"]
             recommended_weeks = result["recommended_weeks"]

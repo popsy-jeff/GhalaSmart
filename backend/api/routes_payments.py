@@ -13,8 +13,8 @@ from decimal import Decimal
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from api import routes_forecast
 from api.auth_utils import get_current_user
-from api.routes_forecast import forecaster
 from api.schemas import (
     AcceptAdvanceRequest,
     AcceptAdvanceResponse,
@@ -156,9 +156,9 @@ def settle_deposit(
     # Determine sale price
     if req.sale_price_per_kg and req.sale_price_per_kg > 0:
         sale_price = float(req.sale_price_per_kg)
-    elif forecaster:
+    elif routes_forecast.forecaster:
         try:
-            sale_price = float(forecaster.get_current_price(deposit.county))
+            sale_price = float(routes_forecast.forecaster.get_current_price(deposit.county))
         except Exception:
             sale_price = float(deposit.current_price_per_kg or 45.0)
     else:
