@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, CheckCircle2, DollarSign, Loader2, ArrowRight } from 'lucide-react';
-import type { Deposit, SettleResponse } from '../../types';
-import { settleDeposit } from '../../api';
+import type { Deposit, Loan, SettleResponse } from '../../types';
+import { fetchLoans, settleDeposit } from '../../api';
+
+// Same rates the backend uses at settlement (core/decision_engine.py)
+const STORAGE_COST_PER_KG_PER_WEEK = 0.5;
+const GRADE_MULTIPLIER: Record<string, number> = { 'Grade 1': 1.0, 'Grade 2': 0.95, 'Grade 3': 0.85 };
+
+const toCents = (n: number) => Math.round(n * 100) / 100;
+
+const daysSince = (isoDate: string) =>
+  Math.floor((Date.now() - new Date(`${isoDate}T00:00:00`).getTime()) / 86_400_000);
 
 interface Props {
   isOpen: boolean;
@@ -17,18 +26,40 @@ export const SettlementModal: React.FC<Props> = ({
   onSuccess,
 }) => {
   const [salePrice, setSalePrice] = useState<number>(() => deposit?.current_price_per_kg || 48.0);
+  const [loan, setLoan] = useState<Loan | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<SettleResponse | null>(null);
 
+  // Reset the price and load this receipt's advance (if any) each time the modal opens
+  useEffect(() => {
+    if (!isOpen || !deposit) return;
+    setSalePrice(toCents(deposit.current_price_per_kg || 45.0));
+    setLoan(null);
+    let cancelled = false;
+    fetchLoans()
+      .then(loans => {
+        if (!cancelled) setLoan(loans.find(l => l.deposit_id === deposit.id && l.status === 'ACTIVE') ?? null);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, deposit]);
+
   if (!isOpen || !deposit) return null;
 
+  // Mirrors settle_deposit: interest and storage run from the advance date (or deposit date), minimum 1 week
   const currentPrice = deposit.current_price_per_kg || 45.0;
   const activeSalePrice = salePrice > 0 ? salePrice : currentPrice;
-  const grossEstimate = deposit.quantity_kg * activeSalePrice;
-  const estimatedStorage = (deposit.quantity_kg / 90.0) * 50.0; // ~50 KES per bag
-  const estimatedAdvancePrincipal = grossEstimate * 0.60;
-  const estimatedNet = Math.max(0, grossEstimate - estimatedAdvancePrincipal - estimatedStorage);
+  const gradedPrice = activeSalePrice * (GRADE_MULTIPLIER[deposit.grade] ?? 1.0);
+  const grossEstimate = deposit.quantity_kg * gradedPrice;
+  const weeksStored = Math.max(daysSince(loan ? loan.disbursement_date : deposit.deposit_date) / 7, 1);
+  const estimatedPrincipal = loan ? Number(loan.principal_amount) : 0;
+  const estimatedInterest = loan ? estimatedPrincipal * Number(loan.interest_rate) * weeksStored : 0;
+  const estimatedStorage = STORAGE_COST_PER_KG_PER_WEEK * deposit.quantity_kg * weeksStored;
+  const estimatedNet = Math.max(0, grossEstimate - estimatedPrincipal - estimatedInterest - estimatedStorage);
+  const weeksLabel = `${weeksStored.toFixed(1)} weeks`;
 
   const handleSettle = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,7 +158,7 @@ export const SettlementModal: React.FC<Props> = ({
                     <input
                       id="sale-price-input"
                       type="number"
-                      step="0.5"
+                      step="0.01"
                       min="10"
                       className="form-input"
                       value={salePrice}
@@ -137,9 +168,9 @@ export const SettlementModal: React.FC<Props> = ({
                     <button
                       type="button"
                       className="btn-sm btn-outline"
-                      onClick={() => setSalePrice(deposit.current_price_per_kg || 45.0)}
+                      onClick={() => setSalePrice(toCents(currentPrice))}
                     >
-                      Use Market Spot ({deposit.current_price_per_kg || 45.0} KES)
+                      Use Market Spot ({currentPrice.toFixed(2)} KES)
                     </button>
                   </div>
                   <span className="field-hint">
@@ -149,15 +180,21 @@ export const SettlementModal: React.FC<Props> = ({
 
                 <div className="calculation-breakdown-card">
                   <div className="calc-line">
-                    <span>Gross Proceeds ({deposit.quantity_kg} kg @ KES {activeSalePrice}/kg):</span>
+                    <span>
+                      Gross Proceeds ({deposit.quantity_kg} kg @ KES {gradedPrice.toFixed(2)}/kg, {deposit.grade}):
+                    </span>
                     <strong>KES {grossEstimate.toLocaleString(undefined, { maximumFractionDigits: 2 })}</strong>
                   </div>
                   <div className="calc-line text-muted">
-                    <span>Est. Loan Principal & Interest:</span>
-                    <span>- KES {estimatedAdvancePrincipal.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+                    <span>Advance Principal:</span>
+                    <span>- KES {estimatedPrincipal.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
                   </div>
                   <div className="calc-line text-muted">
-                    <span>Est. Granary Storage (50 KES/bag):</span>
+                    <span>Est. Advance Interest ({weeksLabel} @ 0.5% weekly):</span>
+                    <span>- KES {estimatedInterest.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+                  </div>
+                  <div className="calc-line text-muted">
+                    <span>Est. Granary Storage ({weeksLabel} @ KES 45/bag weekly):</span>
                     <span>- KES {estimatedStorage.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
                   </div>
                   <div className="calc-line total-line">
